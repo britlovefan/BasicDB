@@ -148,6 +148,7 @@ public class TupleDescTest extends SimpleDbTestBase {
     @Test public void testEquals() {
         TupleDesc singleInt = new TupleDesc(new Type[]{Type.INT_TYPE});
         TupleDesc singleInt2 = new TupleDesc(new Type[]{Type.INT_TYPE});
+        TupleDesc singleInt3 = new TupleDesc(new Type[]{Type.STRING_TYPE,Type.INT_TYPE});
         TupleDesc intString = new TupleDesc(new Type[]{Type.INT_TYPE, Type.STRING_TYPE});
 
         // .equals() with null should return false
@@ -165,6 +166,8 @@ public class TupleDescTest extends SimpleDbTestBase {
         assertFalse(singleInt2.equals(intString));
         assertFalse(intString.equals(singleInt));
         assertFalse(intString.equals(singleInt2));
+        
+        assertFalse(singleInt3.equals(intString));
     }
 
     /**
