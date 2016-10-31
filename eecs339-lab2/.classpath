@@ -5,5 +5,7 @@
 	<classpathentry kind="lib" path="lab1/lib/ant-contrib-1.0b3.jar"/>
 	<classpathentry kind="lib" path="lab1/lib/junit-4.5.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="jline-0.9.94.jar"/>
+	<classpathentry kind="lib" path="zql.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
