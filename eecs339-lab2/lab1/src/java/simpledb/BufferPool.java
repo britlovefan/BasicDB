@@ -17,22 +17,22 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class BufferPool {
     /** Bytes per page, including header. */
+	private int numPages;
+	private final ConcurrentHashMap<PageId,Page> pageMap;
     private static final int PAGE_SIZE = 4096;
-
     private static int pageSize = PAGE_SIZE;
-    
     /** Default number of pages passed to the constructor. This is used by
     other classes. BufferPool should use the numPages argument to the
     constructor instead. */
     public static final int DEFAULT_PAGES = 50;
-
     /**
      * Creates a BufferPool that caches up to numPages pages.
      *
      * @param numPages maximum number of pages in this buffer pool.
      */
     public BufferPool(int numPages) {
-        // some code goes here
+    	this.numPages = numPages;
+    	this.pageMap = new ConcurrentHashMap<PageId, Page>();
     }
     
     public static int getPageSize() {
@@ -64,10 +64,22 @@ public class BufferPool {
      * @param pid the ID of the requested page
      * @param perm the requested permissions on the page
      */
-    public  Page getPage(TransactionId tid, PageId pid, Permissions perm)
+    public Page getPage(TransactionId tid, PageId pid, Permissions perm)
         throws TransactionAbortedException, DbException {
         // some code goes here
-        return null;
+    	 Page p;
+         p = pageMap.get(pid);
+         //if not present
+         if(p == null) {
+           //for Lab1 throw exceptions here 
+            if(pageMap.size() >= numPages) {
+                throw new DbException("lab1 need evict later");
+            }
+            p = Database.getCatalog().getDatabaseFile(pid.getTableId()).readPage(pid);
+            pageMap.put(pid, p);
+         }
+         //if present just return the page
+         return p;
     }
 
     /**
