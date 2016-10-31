@@ -7,7 +7,8 @@ import java.io.Serializable;
  * specific table.
  */
 public class RecordId implements Serializable {
-
+    private PageId pageId;
+    private int tupleNum;
     private static final long serialVersionUID = 1L;
 
     /**
@@ -20,6 +21,8 @@ public class RecordId implements Serializable {
      *            the tuple number within the page.
      */
     public RecordId(PageId pid, int tupleno) {
+    	this.pageId = pid;
+    	this.tupleNum = tupleno;
         // some code goes here
     }
 
@@ -28,7 +31,7 @@ public class RecordId implements Serializable {
      */
     public int tupleno() {
         // some code goes here
-        return 0;
+        return tupleNum;
     }
 
     /**
@@ -36,7 +39,7 @@ public class RecordId implements Serializable {
      */
     public PageId getPageId() {
         // some code goes here
-        return null;
+        return pageId;
     }
 
     /**
@@ -48,7 +51,19 @@ public class RecordId implements Serializable {
     @Override
     public boolean equals(Object o) {
         // some code goes here
-        throw new UnsupportedOperationException("implement this");
+    	if(o==null){
+    		return false;
+    	}
+    	if(this==o){
+    		return true;
+    	}
+    	if(getClass()!=o.getClass()){
+    		return false;
+    	}
+    	RecordId comp = (RecordId)o;
+    	if(this.pageId.equals(comp.pageId)&& this.tupleNum == comp.tupleNum)return true;
+    	return false;
+        //throw new UnsupportedOperationException("implement this");
     }
 
     /**
@@ -59,9 +74,10 @@ public class RecordId implements Serializable {
      */
     @Override
     public int hashCode() {
+    	int k = Integer.valueOf(String.valueOf(pageId.hashCode())+String.valueOf(tupleNum));
         // some code goes here
-        throw new UnsupportedOperationException("implement this");
-
+       // throw new UnsupportedOperationException("implement this");
+    	return k;
     }
 
 }

@@ -15,14 +15,14 @@ public class HeapPageIdTest extends SimpleDbTestBase {
     private HeapPageId pid;
 
     @Before public void createPid() {
-        pid = new HeapPageId(1, 1);
+        pid = new HeapPageId(2, 1);
     }
 
     /**
      * Unit test for HeapPageId.getTableId()
      */
     @Test public void getTableId() {
-        assertEquals(1, pid.getTableId());
+        assertEquals(2, pid.getTableId());
     }
 
     /**
@@ -49,6 +49,8 @@ public class HeapPageIdTest extends SimpleDbTestBase {
         code2 = pid.hashCode();
         assertEquals(code2, pid.hashCode());
         assertEquals(code2, pid.hashCode());
+        
+        assertFalse(code1==code2);
     }
 
     /**
@@ -58,6 +60,7 @@ public class HeapPageIdTest extends SimpleDbTestBase {
         HeapPageId pid1 = new HeapPageId(1, 1);
         HeapPageId pid1Copy = new HeapPageId(1, 1);
         HeapPageId pid2 = new HeapPageId(2, 2);
+        HeapPageId pid3 = new HeapPageId(2, 3);
 
         // .equals() with null should return false
         assertFalse(pid1.equals(null));
@@ -74,6 +77,8 @@ public class HeapPageIdTest extends SimpleDbTestBase {
         assertFalse(pid1Copy.equals(pid2));
         assertFalse(pid2.equals(pid1));
         assertFalse(pid2.equals(pid1Copy));
+        
+        assertFalse(pid3.equals(pid2));
     }
 
     /**

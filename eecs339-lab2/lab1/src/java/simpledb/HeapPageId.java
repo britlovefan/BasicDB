@@ -2,7 +2,8 @@ package simpledb;
 
 /** Unique identifier for HeapPage objects. */
 public class HeapPageId implements PageId {
-
+    private int tableId;
+    private int pageNum;
     /**
      * Constructor. Create a page id structure for a specific page of a
      * specific table.
@@ -11,13 +12,14 @@ public class HeapPageId implements PageId {
      * @param pgNo The page number in that table.
      */
     public HeapPageId(int tableId, int pgNo) {
-        // some code goes here
+        this.tableId = tableId;
+        this.pageNum = pgNo;
     }
 
     /** @return the table associated with this PageId */
     public int getTableId() {
         // some code goes here
-        return 0;
+        return tableId;
     }
 
     /**
@@ -26,7 +28,7 @@ public class HeapPageId implements PageId {
      */
     public int pageNumber() {
         // some code goes here
-        return 0;
+        return pageNum;
     }
 
     /**
@@ -36,8 +38,10 @@ public class HeapPageId implements PageId {
      * @see BufferPool
      */
     public int hashCode() {
+    	int k = Integer.valueOf(String.valueOf(tableId)+String.valueOf(pageNum));
         // some code goes here
-        throw new UnsupportedOperationException("implement this");
+        //throw new UnsupportedOperationException("implement this");
+        return k;
     }
 
     /**
@@ -48,8 +52,19 @@ public class HeapPageId implements PageId {
      *   ids are the same)
      */
     public boolean equals(Object o) {
+     	if(o==null){
+    		return false;
+    	}
+    	if(this==o){
+    		return true;
+    	}
+    	if(getClass()!=o.getClass()){
+    		return false;
+    	}
+    	HeapPageId comp = (HeapPageId)o;
+    	if(this.pageNum == comp.pageNum && this.tableId == comp.tableId)return true;
+    	return false;
         // some code goes here
-        return false;
     }
 
     /**
@@ -60,7 +75,6 @@ public class HeapPageId implements PageId {
      */
     public int[] serialize() {
         int data[] = new int[2];
-
         data[0] = getTableId();
         data[1] = pageNumber();
 
