@@ -17,12 +17,19 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Threadsafe
  */
 public class Catalog {
-
+    private HashMap<String,DbFile> map;
+    private HashMap<Integer,DbFile> id;
+    private HashMap<Integer,String> keyId;
+    private HashMap<Integer,String> nameId;
     /**
      * Constructor.
      * Creates a new, empty catalog.
      */
     public Catalog() {
+    	map = new HashMap<String,DbFile>();
+    	id = new HashMap<Integer,DbFile>();
+    	keyId = new HashMap<Integer,String>();
+    	nameId = new HashMap<Integer,String>();
         // some code goes here
     }
 
@@ -36,6 +43,10 @@ public class Catalog {
      * @param pkeyField the name of the primary key field
      */
     public void addTable(DbFile file, String name, String pkeyField) {
+    	map.put(name,file);
+    	id.put(file.getId(),file);
+    	keyId.put(file.getId(),pkeyField);
+    	nameId.put(file.getId(), name);
         // some code goes here
     }
 
@@ -60,7 +71,12 @@ public class Catalog {
      */
     public int getTableId(String name) throws NoSuchElementException {
         // some code goes here
-        return 0;
+    	if(map.containsKey(name)){
+    		return map.get(name).getId();
+    	}
+    	else{
+    		throw new NoSuchElementException();
+    	}
     }
 
     /**
@@ -71,7 +87,12 @@ public class Catalog {
      */
     public TupleDesc getTupleDesc(int tableid) throws NoSuchElementException {
         // some code goes here
-        return null;
+    	if(id.containsKey(tableid)){
+    		return id.get(tableid).getTupleDesc();
+    	}
+    	else{
+    		throw new NoSuchElementException();
+    	}
     }
 
     /**
@@ -82,12 +103,22 @@ public class Catalog {
      */
     public DbFile getDatabaseFile(int tableid) throws NoSuchElementException {
         // some code goes here
-        return null;
+    	if(id.containsKey(tableid)){
+    		return id.get(tableid);
+    	}
+    	else{
+    		throw new NoSuchElementException();
+    	}
     }
 
     public String getPrimaryKey(int tableid) {
         // some code goes here
-        return null;
+    	//if no primarykey return null
+    	String res = null;
+    	if(keyId.containsKey(tableid)){
+    	    res = keyId.get(tableid);
+    	}
+        return res;
     }
 
     public Iterator<Integer> tableIdIterator() {
@@ -97,11 +128,18 @@ public class Catalog {
 
     public String getTableName(int id) {
         // some code goes here
+    	if(nameId.containsKey(id)){
+    		return nameId.get(id);
+    	}
         return null;
     }
     
     /** Delete all tables from the catalog */
     public void clear() {
+    	map.clear();
+    	id.clear();
+    	nameId.clear();
+    	keyId.clear();
         // some code goes here
     }
     
