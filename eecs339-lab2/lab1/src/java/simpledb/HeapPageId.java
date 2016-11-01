@@ -38,10 +38,10 @@ public class HeapPageId implements PageId {
      * @see BufferPool
      */
     public int hashCode() {
-    	int k = Integer.valueOf(String.valueOf(tableId)+String.valueOf(pageNum));
+    	//int k = Integer.valueOf(String.valueOf(tableId)+String.valueOf(pageNum));
         // some code goes here
         //throw new UnsupportedOperationException("implement this");
-        return k;
+        return tableId<<16+pageNum;
     }
 
     /**
