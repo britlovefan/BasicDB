@@ -68,9 +68,7 @@ public class HeapPage implements Page {
         @return the number of tuples on this page
     */
     private int getNumTuples() {       
-    	int pageSize = BufferPool.getPageSize();
-    	int tupleSize = td.getSize();
-        return (int) Math.floor((pageSize * 8) / (tupleSize * 8 + 1));
+    	return (int) Math.floor((((double)BufferPool.getPageSize())*8)/(((double)td.getSize())*8 +1));
     }
 
     /**
@@ -79,7 +77,8 @@ public class HeapPage implements Page {
      */
     private int getHeaderSize() {        
         // some code goes here
-        return (int) Math.ceil(numSlots/8);
+       // return (int) Math.ceil(numSlots/8);
+      return (int) Math.ceil(((double)this.getNumTuples())/8);    
                  
     }
     
@@ -282,7 +281,7 @@ public class HeapPage implements Page {
      */
     public int getNumEmptySlots() {
     	int counter = 0;
-    	for(int i = 0;i < numSlots;i++){
+    	for(int i = 0;i < this.getNumTuples();i++){
     		if(!isSlotUsed(i))counter++;
     	}
         // some code goes here
@@ -293,9 +292,10 @@ public class HeapPage implements Page {
      * Returns true if associated slot on this page is filled.
      */
     public boolean isSlotUsed(int i) {
-    	int headerbit = i % 8;
-        int headerbyte = (i - headerbit) / 8;
-        return (header[headerbyte] & (1 << headerbit)) != 0; 
+    	int val = header[i / 8];
+    	val >>= (i % 8);
+        val = (val & 1);
+    	return val == 1;
     }
 
     /**
@@ -312,7 +312,13 @@ public class HeapPage implements Page {
      * (note that this iterator shouldn't return tuples in empty slots!)
      */
     public Iterator<Tuple> iterator() {
-    	 return new HeapPageIterator(this);
+    	// return new HeapPageIterator(this);
+    	ArrayList<Tuple> tArray = new ArrayList<Tuple>();
+    	for (int i=0; i<tuples.length;i++){
+    		if(isSlotUsed(i))
+    			tArray.add(tuples[i]);
+    	}
+    	return tArray.listIterator();
     }
     //the subMethod that retrieved the ith tuple 
     Tuple getTuple(int i)throws NoSuchElementException {

@@ -98,12 +98,13 @@ public class HeapFile implements DbFile {
 				}
         }  */
     	int psize = BufferPool.getPageSize();
-    	byte [] data = new byte[(int)Math.min(psize, file.length() - psize*pages.size())];
+    	byte [] data = new byte[psize];
+    	//byte [] data = new byte[(int)Math.min(psize, file.length() - psize*pages.size())];
     	try {
-				RandomAccessFile file = new RandomAccessFile(this.file, "r");
-				file.skipBytes(psize*pages.size());
-				file.read(data);
-				file.close();
+				RandomAccessFile rf = new RandomAccessFile(file, "r");
+				rf.skipBytes(psize*pages.size());
+				rf.read(data);
+				rf.close();
 				pages.add(new HeapPage((HeapPageId) pid, data));
 				return pages.get(pages.size() - 1);
 		} catch (FileNotFoundException e) {
@@ -124,7 +125,8 @@ public class HeapFile implements DbFile {
      * Returns the number of pages in this HeapFile.
      */
     public int numPages() {
-        return (int) (file.length()/BufferPool.getPageSize());
+        //return (int) (file.length()/BufferPool.getPageSize());
+    	return (int) Math.ceil((this.file.length()/BufferPool.getPageSize()));
     }
 
     // see DbFile.java for javadocs
@@ -147,7 +149,8 @@ public class HeapFile implements DbFile {
     //http://users.eecs.northwestern.edu/~jennie/eecs339/labs/simpledb/doc/
     // iterate through through the tuples of each page in the HeapFile
     public DbFileIterator iterator(TransactionId tid) {
-    	 return new HeapFileIterator(this,tid);
+    	DbFileIterator iter = new HeapFileIterator(this,tid);
+    	return iter;
     }
 }
 // define a helper class 
@@ -161,12 +164,12 @@ class HeapFileIterator implements DbFileIterator{
     public HeapFileIterator(HeapFile f,TransactionId id){
     	this.file = f;
     	this.tranId = id;
+    	index = 0;
     }
 	@Override
 	public void open() throws DbException, TransactionAbortedException {
 		//Do not load the entire table into memory on the open() call
 		isOpen = true;
-		index = 0;
 		HeapPageId hpi = new HeapPageId(file.getId(), index);
 		BufferPool bp = Database.getBufferPool();
 		HeapPage hp = (HeapPage)bp.getPage(tranId, hpi, Permissions.READ_ONLY);
@@ -216,8 +219,7 @@ class HeapFileIterator implements DbFileIterator{
 	public void close() {
 		tupIter = null;
 		isOpen = false;
-		index = 0;
-		
+		index = 0;	
 	}
 }
 
