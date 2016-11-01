@@ -1,7 +1,8 @@
 package simpledb;
 
 import java.io.*;
-
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -18,7 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class BufferPool {
     /** Bytes per page, including header. */
 	private int numPages;
-	private final ConcurrentHashMap<PageId,Page> pageMap;
+	private HashMap<PageId,Page> pageMap;
     private static final int PAGE_SIZE = 4096;
     private static int pageSize = PAGE_SIZE;
     /** Default number of pages passed to the constructor. This is used by
@@ -32,7 +33,7 @@ public class BufferPool {
      */
     public BufferPool(int numPages) {
     	this.numPages = numPages;
-    	this.pageMap = new ConcurrentHashMap<PageId, Page>();
+    	this.pageMap = new HashMap<PageId,Page>();
     }
     
     public static int getPageSize() {
@@ -70,16 +71,19 @@ public class BufferPool {
     	 Page p;
          p = pageMap.get(pid);
          //if not present
-         if(p == null) {
+         if(p!=null){
+        	 return p;
+         }
+         else {
            //for Lab1 throw exceptions here 
             if(pageMap.size() >= numPages) {
                 throw new DbException("lab1 need evict later");
             }
             p = Database.getCatalog().getDatabaseFile(pid.getTableId()).readPage(pid);
             pageMap.put(pid, p);
+            return p;
          }
          //if present just return the page
-         return p;
     }
 
     /**

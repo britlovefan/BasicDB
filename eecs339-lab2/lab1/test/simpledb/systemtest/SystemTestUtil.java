@@ -110,22 +110,23 @@ public class SystemTestUtil {
     public static void matchTuples(DbIterator iterator, List<ArrayList<Integer>> tuples)
             throws DbException, TransactionAbortedException, IOException {
         ArrayList<ArrayList<Integer>> copy = new ArrayList<ArrayList<Integer>>(tuples);
-
         if (Debug.isEnabled()) {
             Debug.log("Expected tuples:");
             for (ArrayList<Integer> t : copy) {
                 Debug.log("\t" + Utility.listToString(t));
             }
         }
-
         iterator.open();
+        //add some own test 
+        int count1 = 0;
         while (iterator.hasNext()) {
+        	count1++;
             Tuple t = iterator.next();
             ArrayList<Integer> list = tupleToList(t);
             boolean isExpected = copy.remove(list);
             Debug.log("scanned tuple: %s (%s)", t, isExpected ? "expected" : "not expected");
             if (!isExpected) {
-                Assert.fail("expected tuples does not contain: " + t);
+                Assert.fail("At "+Integer.toString(count1)+" expected tuples does not contain: " + t);
             }
         }
         iterator.close();

@@ -113,7 +113,7 @@ public class Tuple implements Serializable {
     public Iterator<Field> fields()
     {
         // some code goes here
-        return new Iterator<Field>(){
+        /*return new Iterator<Field>(){
             private int index = 0;
 			@Override
 			public boolean hasNext() {
@@ -126,7 +126,8 @@ public class Tuple implements Serializable {
 				return arr[index++];
 			}
         	
-        };
+        };*/
+    	return Arrays.asList(arr).iterator();
     }
     
     /**

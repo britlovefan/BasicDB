@@ -114,7 +114,7 @@ public class TupleDesc implements Serializable {
     	}
         return fieldName[i];
     }
-
+    
     /**
      * Gets the type of the ith field of this TupleDesc.
      * 
