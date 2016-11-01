@@ -315,58 +315,59 @@ public class HeapPage implements Page {
     	 return new HeapPageIterator(this);
     }
     //the subMethod that retrieved the ith tuple 
-    Tuple getTuple(int i) throws NoSuchElementException {
-        if (i >= tuples.length)
-            throw new NoSuchElementException();
-        try {
-        	//not returning empty 
-            if(!isSlotUsed(i)) {
-                return null;
-            }
-            return tuples[i];
-        } catch (ArrayIndexOutOfBoundsException e) {
-            throw new NoSuchElementException();
-        }
-    }
-}
-class HeapPageIterator implements Iterator<Tuple> {
-	HeapPage p;
-    int curIndex = 0;
-    Tuple nextToReturn = null;
-    public HeapPageIterator(HeapPage p) {
-        this.p = p;
-    }
-    public boolean hasNext() {
-        if (nextToReturn != null)
-            return true;
-        try {
-            while (true) {
-                nextToReturn = p.getTuple(curIndex++);
-                if(nextToReturn != null)
-                    return true;
-            }
-        } catch(NoSuchElementException e) {
-            return false;
-        }
-    }
-    public Tuple next() {
-        Tuple next = nextToReturn;
-        if (next == null) {
-            if (hasNext()) {
-                next = nextToReturn;
-                nextToReturn = null;
-                return next;
-            } else
-                throw new NoSuchElementException();
-        } else {
-            nextToReturn = null;
-            return next;
-        }
-    }
+    Tuple getTuple(int i)throws NoSuchElementException {
+    	 if (i >= tuples.length)
+             throw new NoSuchElementException();
+         try {
+             if(!isSlotUsed(i)) {
+                 return null;
+             }
+             return tuples[i];
 
-    public void remove() {
+         } catch (ArrayIndexOutOfBoundsException e) {
+             throw new NoSuchElementException();
+         }
+     }
+}
+
+class HeapPageIterator implements Iterator<Tuple> {
+	  int curTuple = 0;
+	  Tuple nextToReturn = null;
+	  HeapPage p;
+	  public HeapPageIterator(HeapPage p) {
+	        this.p = p;
+	  }
+	  public boolean hasNext() {
+	      if (nextToReturn != null)
+	           return true;
+	        try {
+	        	//return the next nonEmpty tuple
+	            while (true) {
+	                nextToReturn = p.getTuple(curTuple++);
+	                if(nextToReturn != null)
+	                    return true;
+	            }
+	        } catch(NoSuchElementException e) {
+	            return false;
+	        }
+	    }
+	    public Tuple next() {
+	        Tuple next = nextToReturn;
+	        if (next == null) {
+	            if (hasNext()) {
+	                next = nextToReturn;
+	                nextToReturn = null;
+	                return next;
+	            } else
+	                throw new NoSuchElementException();
+	        } else {
+	            nextToReturn = null;
+	            return next;
+	        }
+	    }
+      public void remove() {
         throw new UnsupportedOperationException();
-    }
+      }
 }
 
 

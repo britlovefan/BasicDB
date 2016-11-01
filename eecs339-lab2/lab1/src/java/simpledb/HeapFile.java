@@ -14,7 +14,8 @@ import java.util.*;
  * @author Sam Madden
  */
 public class HeapFile implements DbFile {
-
+    private File file;
+    private TupleDesc td;
     /**
      * Constructs a heap file backed by the specified file.
      * 
@@ -23,6 +24,8 @@ public class HeapFile implements DbFile {
      *            file.
      */
     public HeapFile(File f, TupleDesc td) {
+    	this.file = f;
+    	this.td = td;
         // some code goes here
     }
 
@@ -33,7 +36,7 @@ public class HeapFile implements DbFile {
      */
     public File getFile() {
         // some code goes here
-        return null;
+        return file;
     }
 
     /**
@@ -47,7 +50,8 @@ public class HeapFile implements DbFile {
      */
     public int getId() {
         // some code goes here
-        throw new UnsupportedOperationException("implement this");
+    	return file.getAbsoluteFile().hashCode();
+        //throw new UnsupportedOperationException("implement this");
     }
 
     /**
@@ -57,13 +61,40 @@ public class HeapFile implements DbFile {
      */
     public TupleDesc getTupleDesc() {
         // some code goes here
-        throw new UnsupportedOperationException("implement this");
+    	return td;
+        //throw new UnsupportedOperationException("implement this");
     }
 
     // see DbFile.java for javadocs
     public Page readPage(PageId pid) {
+    	HeapPageId hid = (HeapPageId)pid;
+        BufferedInputStream bin = null;
+        try{
+            RandomAccessFile raf = new RandomAccessFile(file,"r");
+        	bin = new BufferedInputStream(new FileInputStream(raf.getFD()));
+        	byte[] pf = new byte[BufferPool.getPageSize()];
+        	int check = bin.read(pf, 0, BufferPool.getPageSize());
+        	if (check == -1) {
+               throw new IllegalArgumentException("Read past end of table");
+            }
+        	if(check < BufferPool.getPageSize()){
+        		throw new IllegalArgumentException("Read is failed");
+        	}
+        	HeapPage p = new HeapPage(hid, pf);
+            return p;
+        }
+        catch(IOException e){
+        	throw new RuntimeException();
+        }
+        finally{
+        		try {
+        			if(bin!=null)bin.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+        }   
         // some code goes here
-        return null;
     }
 
     // see DbFile.java for javadocs
@@ -77,7 +108,7 @@ public class HeapFile implements DbFile {
      */
     public int numPages() {
         // some code goes here
-        return 0;
+        return (int) (file.length()/BufferPool.getPageSize());
     }
 
     // see DbFile.java for javadocs
@@ -98,6 +129,10 @@ public class HeapFile implements DbFile {
 
     // see DbFile.java for javadocs
     public DbFileIterator iterator(TransactionId tid) {
+    	
+    	
+    	
+    	
         // some code goes here
         return null;
     }
