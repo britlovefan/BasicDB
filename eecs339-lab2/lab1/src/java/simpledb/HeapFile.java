@@ -181,20 +181,6 @@ class HeapFileIterator implements DbFileIterator{
 
 	@Override
 	public Tuple next() throws DbException, TransactionAbortedException, NoSuchElementException {
-		/*if(!hasNext())throw new NoSuchElementException();
-		else{
-	     if (tupIter != null&&!tupIter.hasNext()) tupIter = null;
-	     while (tupIter == null && index < file.numPages() - 1) {
-	            index++;
-	            HeapPageId curpid = new HeapPageId(file.getId(), index);
-	            HeapPage curp = (HeapPage) Database.getBufferPool().getPage(tranId,
-	                    curpid, Permissions.READ_ONLY);
-	            tupIter = curp.iterator();
-	            if (!tupIter.hasNext())tupIter = null;
-	     }
-	     if (tupIter == null)return null;
-	     return tupIter.next();
-	   }*/
 		if (isOpen) {
 			if (hasNext()) {
 				return tupIter.next();
