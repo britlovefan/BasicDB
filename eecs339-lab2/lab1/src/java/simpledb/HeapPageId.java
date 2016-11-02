@@ -77,7 +77,6 @@ public class HeapPageId implements PageId {
         int data[] = new int[2];
         data[0] = getTableId();
         data[1] = pageNumber();
-
         return data;
     }
 

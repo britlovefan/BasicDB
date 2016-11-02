@@ -76,7 +76,6 @@ public class RecordId implements Serializable {
     public int hashCode() {
     	int k = Integer.valueOf(String.valueOf(pageId.hashCode())+String.valueOf(tupleNum));
         // some code goes here
-       // throw new UnsupportedOperationException("implement this");
     	return k;
     }
 
