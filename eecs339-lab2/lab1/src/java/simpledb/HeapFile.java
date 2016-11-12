@@ -69,37 +69,8 @@ public class HeapFile implements DbFile {
 
     // see DbFile.java for javadocs
     public Page readPage(PageId pid) {
-    	/*
-    	HeapPageId hid = (HeapPageId)pid;
-        BufferedInputStream bin = null;
-        try{
-            RandomAccessFile raf = new RandomAccessFile(file,"r");
-        	bin = new BufferedInputStream(new FileInputStream(raf.getFD()));
-        	byte[] pf = new byte[BufferPool.getPageSize()];
-        	int check = bin.read(pf, 0, BufferPool.getPageSize());
-        	if (check == -1) {
-               throw new IllegalArgumentException("Read past end of table");
-            }
-        	if(check < BufferPool.getPageSize()){
-        		throw new IllegalArgumentException("Read is failed");
-        	}
-        	HeapPage p = new HeapPage(hid, pf);
-            return p;
-        }
-        catch(IOException e){
-        	throw new RuntimeException();
-        }
-        finally{
-        		try {
-        			if(bin!=null)bin.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-        }  */
     	int psize = BufferPool.getPageSize();
     	byte [] data = new byte[psize];
-    	//byte [] data = new byte[(int)Math.min(psize, file.length() - psize*pages.size())];
     	try {
 				RandomAccessFile rf = new RandomAccessFile(file, "r");
 				rf.skipBytes(psize*pages.size());
