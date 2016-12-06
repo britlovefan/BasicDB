@@ -1,0 +1,20 @@
+1.Describe any design decisions you made, including anything that was difficult or unexpected.
+
+When I am doing this homework, it's really confusing at first when I look through all
+the classes provided but don't know what to do. Even though I know the Algorithm, I do not
+know how to judge a page to be leafpage or internal page..etc. Thus reading the other classes and
+learning how to use the functions took a lot of time. The main idea for each exercise is simply 
+writing correct recursion and pay attention that for leaf pages the pages are double-linked to
+each other, thus we need to maintain the two way order. Finally, I am confused about the system
+test, it shows that I fail evict page test, I double checked the BufferPool.java but didn't find
+anything valuable, still don't know why my code didn't evict enough pages..
+
+2. Discuss and justify any changes you made outside of BTreeFile.java.
+
+I didn't make any paticular changes outside BTreeFile.java
+
+3. Optional: How long did this lab take you? Do you have any suggestions for ways to improve it?
+
+Took me around 20 hours. I think there should be a clear document instead of the long descriptions
+on Canvas.. Hope the document would be provided according to the logic ideas. I need to read the 
+descriptions multiple times to get a single exercise worked. 
